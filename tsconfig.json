@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "declaration": true,
+    "isolatedModules": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": false,
+    "module": "CommonJS",
+    "target": "es2017",
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+  }
+}
