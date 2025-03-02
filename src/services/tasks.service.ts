@@ -1,9 +1,12 @@
+import { taskBadRequestError } from "../errors/bad-request.errors.ts";
+import { taskConflictError } from "../errors/conflict.errors.ts";
+import { taskNotFoundError } from "../errors/not-found.errors.ts";
 import { tasksRepository } from "../repositories/tasks.repository.ts";
 import {Task} from "../schemas/task.schema.ts";
 
 async function createTask(task: Task){
   const taskFound = await tasksRepository.findByTitle(task.title);
-  if (taskFound) throw new Error('Task already exists');
+  if (taskFound) throw taskConflictError();
   return await tasksRepository.create(task);
 }
 
@@ -16,10 +19,15 @@ async function getTaskById(id: string){
 }
 
 async function updateTask(id: string, task:Task){
-  return await tasksRepository.update(id, task);
+  const taskExists = await tasksRepository.findById(id);
+  if (!taskExists) throw taskNotFoundError();
+  const {modifiedCount} = await tasksRepository.update(id, task);
+  if (!modifiedCount) throw taskBadRequestError();
 }
 
 async function deleteTask(id:string){
+  const taskExists = await tasksRepository.findById(id);
+  if (!taskExists) throw taskNotFoundError();
   return await tasksRepository.remove(id);
 }
 

@@ -2,18 +2,18 @@ import { ObjectSchema } from "yup";
 import { Task } from "../schemas/task.schema.ts";
 import { NextFunction, Request, Response } from "express";
 
-export function validateBody(schema: ObjectSchema<Task>) {
+export function validateBody(schema: ObjectSchema<any>) {
   return validate(schema, 'body');
 }
 
-export function validateParams() {
-
+export function validateParams(schema: ObjectSchema<any>) {
+  return validate(schema, 'params');
 }
 export function validateQuery() {
 
 }
 
-export function validate(schema: ObjectSchema<any>, type: RequestType['field']) {
+export function validate(schema: ObjectSchema<any>, type: ParameterType['field']) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await schema.validate(req[type], {abortEarly: false});
@@ -26,6 +26,6 @@ export function validate(schema: ObjectSchema<any>, type: RequestType['field']) 
   }
 }
 
-interface RequestType {
+interface ParameterType {
   field: 'body' | 'params' | 'query'
 }

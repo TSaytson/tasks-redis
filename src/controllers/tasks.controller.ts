@@ -22,14 +22,12 @@ export async function getTaskById(req:Request, res:Response){
 export async function updateTask(req:Request, res:Response){
   const {id} = req.params;
   const task:Task = req.body;
-  const {modifiedCount} = await tasksService.updateTask(id, task);
-  if (!modifiedCount) throw new Error('Task not modified');
+  await tasksService.updateTask(id, task);
   res.status(200).send(task);
 }
 
 export async function deleteTask(req:Request, res:Response){
   const {id} = req.params;
-  const {deletedCount} = await tasksService.deleteTask(id);
-  if (!deletedCount) throw new Error("Task not deleted");
+  await tasksService.deleteTask(id);
   res.sendStatus(204)
 }
